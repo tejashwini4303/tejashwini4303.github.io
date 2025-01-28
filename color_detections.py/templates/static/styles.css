@@ -1,0 +1,98 @@
+/* Base styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e2f0cb, #9ec3a9); /* Gradient background */
+    color: #343a40; /* Dark gray text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container styles */
+.container {
+    background: white; /* White background for the form */
+    border-radius: 16px; /* Increased border radius for a softer look */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+    padding: 2.5rem; /* Increased padding */
+    max-width: 400px;
+    width: 90%; /* Responsive width */
+    text-align: center;
+}
+
+/* Heading styles */
+h1 {
+    font-size: 2.5rem;
+    color: #4a94a5; /* Teal color for the heading */
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Increased spacing between form elements */
+}
+
+/* Input field styles */
+input[type="text"] {
+    padding: 1rem;
+    border: 2px solid #4a94a5; /* Teal border */
+    border-radius: 10px; /* More rounded corners */
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #007bff; /* Blue on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Blue glow effect */
+}
+
+/* Button styles */
+button {
+    padding: 1rem;
+    border: none;
+    border-radius: 10px; /* More rounded corners */
+    background-color: #007bff; /* Blue background */
+    color: #ffffff; /* White text */
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Lift effect on hover */
+    box-shadow: 0 4px 15px rgba(0, 86, 179, 0.5); /* Shadow on hover */
+}
+
+/* Result section styles */
+.result {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    color: #495057; /* Dark gray for results */
+    font-weight: bold;
+    border-top: 2px solid #e9ecef; /* Light border on top */
+    padding-top: 1rem;
+}
+
+/* Footer styles */
+footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #868e96; /* Lighter gray */
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+    button {
+        font-size: 1rem;
+    }
+}

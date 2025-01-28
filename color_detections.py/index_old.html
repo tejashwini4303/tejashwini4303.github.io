@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Detection</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Color Detection App</h1>
+        <form id="colorForm">
+            <input type="text" id="colorInput" placeholder="Enter color name..." required>
+            <button type="submit">Detect Color</button>
+        </form>
+        <div class="result" id="resultDisplay"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Color Detection Application</p>
+    </footer>
+
+    <script>
+        // JavaScript code for handling form submission and displaying results
+        document.getElementById('colorForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            const colorInput = document.getElementById('colorInput').value;
+            document.getElementById('resultDisplay').innerText = 'Selected color: ' + colorInput;
+            // Here you can add your AJAX request to send data to the server for detection
+        });
+    </script>
+</body>
+</html>
