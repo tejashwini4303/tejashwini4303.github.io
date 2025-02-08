@@ -1,0 +1,118 @@
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
+
+public class WebhookServers {
+
+    public static void main(String[] args) throws IOException {
+        // Create an HTTP server that listens on port 8000
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+
+        // Define the webhook endpoint
+        server.createContext("/webhook", new WebhookHandler());
+        server.createContext("/chat", new ChatHandler());
+
+        // Start the server
+        server.setExecutor(null); // default executor
+        server.start();
+        System.out.println("Server is listening on port 8000...");
+    }
+
+    // Custom handler for processing webhook requests
+    static class WebhookHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            // Add CORS headers
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, OPTIONS");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+
+            if ("OPTIONS".equals(exchange.getRequestMethod())) {
+                exchange.sendResponseHeaders(200, -1);
+                return; // End early for CORS preflight request
+            }
+
+            if ("POST".equals(exchange.getRequestMethod())) {
+                // Use BufferedReader to read the request body
+                BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
+                String requestBody = reader.lines().collect(Collectors.joining("\n"));
+
+                // Log the received webhook data
+                System.out.println("Received Webhook Data: " + requestBody);
+
+                // Send a JSON response back
+                String responseJson = "{\"status\":\"success\",\"message\":\"Webhook received!\"}";
+                exchange.getResponseHeaders().add("Content-Type", "application/json");
+                exchange.sendResponseHeaders(200, responseJson.getBytes(StandardCharsets.UTF_8).length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(responseJson.getBytes(StandardCharsets.UTF_8));
+                os.close();
+            } else {
+                // For non-POST requests, return 405 Method Not Allowed
+                exchange.sendResponseHeaders(405, -1); // -1 means no response body
+            }
+        }
+    }
+
+   // Custom handler for chat messages
+static class ChatHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        // Add CORS headers
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "POST, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+
+        if ("OPTIONS".equals(exchange.getRequestMethod())) {
+            exchange.sendResponseHeaders(200, -1);
+            return; // End early for CORS preflight request
+        }
+
+        if ("POST".equals(exchange.getRequestMethod())) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
+            String requestBody = reader.lines().collect(Collectors.joining("\n"));
+
+            // Log the received chat message
+            System.out.println("Received Chat Message: " + requestBody);
+
+            // Parse the received message
+            String riderMessage = requestBody.toLowerCase();
+
+            // Logic for driver's responses based on rider's message
+            String driverResponse;
+            if (riderMessage.contains("hi") || riderMessage.contains("hello")) {
+                driverResponse = "Hi! This is driver, how can I help you!?";
+            } else if (riderMessage.contains("need a ride")) {
+                driverResponse = "Your ride is on the way!";
+            } else if (riderMessage.contains("ok")) {
+                driverResponse = "Great! Looking forward to seeing you.";
+            } else if (riderMessage.contains("see you soon")) {
+                driverResponse = "See you soon! Drive safe.";
+            } else if (riderMessage.contains("thank you")) {
+                driverResponse = "You're welcome! Let me know if you need anything else.";
+            } else {
+                driverResponse = "Hello, this is the driver."; // Default response
+            }
+
+            // Send a JSON response back
+            String responseJson = "{\"status\":\"success\",\"message\":\"" + driverResponse + "\"}";
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, responseJson.getBytes(StandardCharsets.UTF_8).length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(responseJson.getBytes(StandardCharsets.UTF_8));
+            os.close();
+        } else {
+            // For non-POST requests, return 405 Method Not Allowed
+            exchange.sendResponseHeaders(405, -1); // -1 means no response body
+        }
+    }
+}
+}
