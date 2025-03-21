@@ -1,0 +1,8 @@
+# Ignore image files
+*.jpg
+*.jpeg
+*.png
+
+# Ignore specific folders
+node_modules/
+dist/
